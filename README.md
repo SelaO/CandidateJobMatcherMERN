@@ -4,4 +4,4 @@ Technologies used are: MongoDB, Mongoose, React, Express, NodeJs.
 
 To run each part see readme in each subfolder.
 
-![preview](https://github.com/SelaO/CandidateJobMatcherMERN/blob/master/preview.jpg?raw=true)
+![preview](https://github.com/SelaO/CandidateJobMatcherMERN/blob/master/preview.png?raw=true)

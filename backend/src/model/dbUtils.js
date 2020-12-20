@@ -13,24 +13,20 @@ const createCandidate = async (req) => {
   };
   try {
     const result = await new Candidate(obj).save();
-    try {
-      const promises = [];
-      for (const skill of req.skills) {
-        promises.push(
-          Skill.findOneAndUpdate(
-            { name: skill },
-            { $push: { candidates: result._id } },
-            createOptions
-          )
-        );
-      }
-      Promise.all(promises).then((documents) => {
-        result.skills = documents.map((e) => e._id);
-        result.save();
-      });
-    } catch (err) {
-      console.log(err);
+    const promises = [];
+    for (const skill of req.skills) {
+      promises.push(
+        Skill.findOneAndUpdate(
+          { name: skill },
+          { $push: { candidates: result._id } },
+          createOptions
+        )
+      );
     }
+    Promise.all(promises).then((documents) => {
+      result.skills = documents.map((e) => e._id);
+      result.save();
+    });
   } catch (error) {
     console.error(error);
   }
@@ -128,22 +124,22 @@ const getAllCandidates = async () => {
 };
 
 const getAllJobs = async () => {
-    console.log("trying to fetch all jobs");
-    const jobs = await Job.find();
-    const result = [];
-  
-    const allSkills = jobs.flatMap((e) => e.skill);
-    const skillsMap = await getSkillsIdsMap(allSkills);
-    for (const job of jobs) {
-      result.push({
-        title: job.title,
-        skill: skillsMap[job.skill],
-        id: job._id,
-      });
-    }
-  
-    return result;
-  };
+  console.log("trying to fetch all jobs");
+  const jobs = await Job.find();
+  const result = [];
+
+  const allSkills = jobs.flatMap((e) => e.skill);
+  const skillsMap = await getSkillsIdsMap(allSkills);
+  for (const job of jobs) {
+    result.push({
+      title: job.title,
+      skill: skillsMap[job.skill],
+      id: job._id,
+    });
+  }
+
+  return result;
+};
 
 module.exports = {
   createCandidate,
